@@ -1,0 +1,24 @@
+{
+    "name": "frame/phpframe",
+    "description": "The php Framework",
+    "type": "framework",
+    "keywords": ["framework","phpframe","ORM"],
+    "homepage": "http://www.cugqz.com:5678/",
+    "license": "Apache2",
+    "authors": [
+        {
+            "name": "daiheng",
+            "email": "nothing_style@126.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "secure-http": false
+    },
+    "require-dev": {
+        "eaglewu/swoole-ide-helper": "dev-master"
+    }
+}
