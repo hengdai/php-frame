@@ -11,8 +11,18 @@
             "email": "nothing_style@126.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:vrana/notorm.git"
+        },
+        {
+            "packagist": false
+        }
+    ],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "vrana/notorm": "dev-master"
     },
     "minimum-stability": "dev",
     "config": {

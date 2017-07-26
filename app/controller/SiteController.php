@@ -10,6 +10,13 @@ class SiteController extends Controller
 {
     public function index()
     {
+//        new BaseSql();
+//        $pdo = BaseSql::getPdoInstance();
+//        $notOrm = new NotORM($pdo);
+//        $result = $notOrm->zph_user()->limit(10);
+//        foreach ($result as $value) {
+//            print_r($value['username']);
+//        }
         $this->render('site/index', []);
     }
 }

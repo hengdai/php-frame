@@ -16,7 +16,7 @@
 <body>
 
 <h1>Hello World!</h1>
-<a href="#" target="_blank">github</a>
+<a href="https://github.com/hengdai/php-frame" target="_blank">github</a>
 
 </body>
 </html>

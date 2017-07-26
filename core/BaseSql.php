@@ -21,6 +21,7 @@ class BaseSql
     protected static $config = [];
     public static $dbConfig = [];
     private static $instance = null;
+    private static $pdoInstance = null;
 
     function __construct()
     {
@@ -58,6 +59,23 @@ class BaseSql
 
         self::$instance = $conn;
         return self::$instance;
+    }
+
+    public static function getPdoInstance()
+    {
+        if (!is_null(self::$pdoInstance)) {
+            return self::$pdoInstance;
+        }
+
+        $conn = new PDO('mysql:host=' . self::$dbConfig['DB_HOST'] . ';dbname=' . self::$dbConfig['DB_NAME'], self::$dbConfig['DB_USER'], self::$dbConfig['DB_PWD']);
+
+        if (!$conn) {
+            exit('数据库连接失败！');
+        }
+        $conn->query("SET NAMES 'utf-8'");
+
+        self::$pdoInstance = $conn;
+        return self::$pdoInstance;
     }
 
     public function getTableName($hump)
