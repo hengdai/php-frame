@@ -10,8 +10,8 @@ class SiteController extends Controller
 {
     public function index()
     {
-//        $res = ZphUserModel::query()->findFirst();
-//        print_r($res->company);
+//        $zphUser = ZphUserModel::query()->findByPk(1);
+//        print_r($zphUser->company);
         $this->render('site/index', []);
     }
 }

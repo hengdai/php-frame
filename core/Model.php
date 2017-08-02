@@ -241,7 +241,7 @@ class Model
                     $dataString .= $value . (($i > $length) ? '' : ', ');
                 }
 
-                $this->filter .= 'insert into ' . $this->_table . '(' . $fildString . ') values (' . $dataString . ')';
+                $this->filter .= "insert into " . $this->_table . "(" . $fildString . ") values ('" . $dataString. "')";
             } else {
                 $primaryKeyValue = $data[$pk];
                 unset($data[$pk]);
@@ -254,10 +254,13 @@ class Model
                 }
                 $this->filter .= 'update ' . $this->_table . ' set ' . $Dstring . ' where ' . $pk . ' = ' . $primaryKeyValue;
             }
-        } catch (Exception $e) {
-            throw new Exception('', [$e]);
+
+            return $this->_dbHandel->query($this->filter);
+        } catch (\PDOException $e) {
+            throw new Exception('addOrUpdateError', [$e]);
+            Log::debug('addOrUpdateError', [$e]);
         }
 
-       return $this->_dbHandel->query($this->filter);
+       return false;
     }
 }

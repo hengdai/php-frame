@@ -9,10 +9,12 @@
 class DbTransaction extends Model
 {
     protected $logic;
+    protected $pdo;
 
     function __construct($logic)
     {
         $this->logic = $logic;
+        $this->pdo = Model::getPdoInstance();
     }
 
     public static function run($logic)
@@ -22,13 +24,30 @@ class DbTransaction extends Model
     }
 
     function runTransaction()
-    {}
+    {
+        $this->assertNotInTransaction();
+        $this->pdo->beginTransaction();
 
-    //断言
+        try {
+            call_user_func($this->logic, $this);
+            $result = $this->pdo->commit();
+            if (!$result) {
+                throw new PDOException();
+            }
+        } catch (\PDOException $e) {
+            $this->pdo->rollBack();
+            Log::debug('DbTransactionError', [$e]);
+            throw $e;
+        }
+    }
+
+    //断言,当前不在事务中，否则抛错
     function assertNotInTransaction()
     {
-        $mysqli = Model::getInstance();
+        if (!$this->pdo->inTransaction()) {
+            return true;
+        }
 
-
+        throw new Exception();
     }
 }
