@@ -6,7 +6,7 @@
  * Date: 2017/6/15
  * Time: 16:02
  */
-class DbTransaction extends BaseSql
+class DbTransaction extends Model
 {
     protected $logic;
 
@@ -27,7 +27,7 @@ class DbTransaction extends BaseSql
     //断言
     function assertNotInTransaction()
     {
-        $mysqli = BaseSql::getInstance();
+        $mysqli = Model::getInstance();
 
 
     }
