@@ -6,7 +6,7 @@
  * Time: 15:21
  */
 
-class Controller
+class BaseController
 {
     protected $_controller;
     protected $_action;

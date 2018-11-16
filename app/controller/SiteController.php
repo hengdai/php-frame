@@ -6,7 +6,7 @@
  * Time: 13:35
  */
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     public function index()
     {

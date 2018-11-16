@@ -19,6 +19,10 @@ $data = [
         'defaultController' => 'site',
         'defaultAction' => 'index',
     ],
+    'defaultApiConfig' => [
+        'defaultController' => 'site',
+        'defaultApi' => 'index',
+    ],
 ];
 
 return $data;

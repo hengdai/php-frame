@@ -8,21 +8,27 @@
  */
 class Request
 {
-    public function get($key)
+    public function get($key = '')
     {
-        if (isset($_GET[$key])) {
+        if ($key == '') {
+            array_shift($_GET);
+            return $_GET;
+        } elseif (isset($_GET[$key])) {
             return $_GET[$key];
+        } else {
+            throw new Exception('the request key is dosn\'t exist!');
         }
-
-        return '';
     }
 
-    public function post($key)
+    public function post($key = '')
     {
-        if (isset($_POST[$key])) {
+        if ($key == '') {
+            array_shift($_POST);
+            return $_POST;
+        } elseif (isset($_POST[$key])) {
             return $_POST[$key];
+        } else {
+            throw new Exception('the request key is dosn\'t exist!');
         }
-
-        return '';
     }
 }

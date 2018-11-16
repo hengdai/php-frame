@@ -33,7 +33,8 @@ class Core
     {
         $corePatch = APP_PATH . 'core/' . $class . '.php';
         $modelPath = APP_PATH . 'app/model/' . $class . '.php';
-        $controllerPath = APP_PATH . 'app/controller/' . $class . '.php';;
+        $controllerPath = APP_PATH . 'app/controller/' . $class . '.php';
+        $apiControllerPath = APP_PATH . 'app/api/' . $class . '.php';
 
         if (file_exists($modelPath)) {
             include($modelPath);
@@ -41,6 +42,8 @@ class Core
             include($corePatch);
         } elseif (file_exists($controllerPath)) {
             include($controllerPath);
+        } elseif (file_exists($apiControllerPath)) {
+            include($apiControllerPath);
         }
     }
 
@@ -59,8 +62,6 @@ class Core
 
     public function rout()
     {
-        $controllerName = ucfirst($this->config['defaultConfig']['defaultController']);
-        $actionName = $this->config['defaultConfig']['defaultAction'];
         $url = $_SERVER['REQUEST_URI'];
         $position = strpos($url, '?');
         $params = [];
@@ -69,29 +70,56 @@ class Core
             $url = substr($url , 0 , $position);
         }
         $url = trim($url, '/');
-
         if ($url) {
             $urlArr = explode('/', $url);
-            $controllerName = ucfirst(isset($urlArr[0]) ? $urlArr[0] : $controllerName);
+            if (isset($urlArr[0]) && $urlArr[0] == 'api') {
+                $apiControllerName = ucfirst($this->config['defaultApiConfig']['defaultController']);
+                $apiName = $this->config['defaultApiConfig']['defaultApi'];
+                array_shift($urlArr);
+                $apiControllerName = ucfirst(isset($urlArr[0]) ? $urlArr[0] : $apiControllerName);
 
-            array_shift($urlArr);
-            $actionName = isset($urlArr[0]) ? $urlArr[0] : $actionName;
+                array_shift($urlArr);
+                $apiName = 'index';
 
-            array_shift($urlArr);
-            $params = isset($urlArr[0]) ? $urlArr[0] : [];
+                array_shift($urlArr);
+                $params = isset($urlArr[0]) ? $urlArr[0] : $params;
+
+                $controller = $apiControllerName . 'Api';
+
+                if (!class_exists($controller)) {
+                    exit('"' . $controller . '" dosn\'t exist！');
+                }
+
+                if (!method_exists($controller, $apiName)) {
+                    exit('method "' . $apiName . '" dosn\'t exist！！');
+                }
+
+                $dispatch = new $controller($apiControllerName, $apiName);
+                $dispatch->$apiName($params);
+            } else {
+                $controllerName = ucfirst($this->config['defaultConfig']['defaultController']);
+                $actionName = $this->config['defaultConfig']['defaultAction'];
+                $controllerName = ucfirst(isset($urlArr[0]) ? $urlArr[0] : $controllerName);
+
+                array_shift($urlArr);
+                $actionName = isset($urlArr[0]) ? $urlArr[0] : $actionName;
+
+                array_shift($urlArr);
+                $params = isset($urlArr[0]) ? $urlArr[0] : $params;
+
+                $controller = $controllerName . 'Controller';
+
+                if (!class_exists($controller)) {
+                    exit('"' . $controller . '" dosn\'t exist！');
+                }
+
+                if (!method_exists($controller, $actionName)) {
+                    exit('method "' . $actionName . '" dosn\'t exist！！');
+                }
+
+                $dispatch = new $controller($controllerName, $actionName);
+                $dispatch->$actionName($params);
+            }
         }
-
-        $controller = $controllerName . 'Controller';
-
-        if (!class_exists($controller)) {
-            exit($controller . ' dosn\'t exist！');
-        }
-
-        if (!method_exists($controller, $actionName)) {
-            exit($actionName . ' dosn\'t exist！！');
-        }
-
-        $dispatch = new $controller($controllerName, $actionName);
-        $dispatch->$actionName($params);
     }
 }

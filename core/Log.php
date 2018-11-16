@@ -24,6 +24,9 @@ class Log
     protected static function logToFile($log)
     {
         $fileName = date('Y-m-d', time()).'.log';
+        if (!file_exists('log/')) {
+            mkdir('log');
+        }
         $file = fopen('log/' . $fileName, 'a') or die('文件打开或者新建失败');
         fwrite($file, $log);
         fclose($file);
